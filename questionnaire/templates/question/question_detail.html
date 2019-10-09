@@ -1,0 +1,20 @@
+<div class="col-md-8 offset-md-2">
+    <div class="panel panel-default">
+        <!-- Default panel contents -->
+        <div class=" panel-heading ">
+            <p>{{question.text}}</p>
+        </div>
+        <div>
+        </div>
+        <div class="panel-body ">
+            <div class="container-fluid ">
+                <a class="btn btn-primary" href="{% url 'add_choice' pk=question.pk %} ">Add choice</a> 
+                <a href="{% url 'question_delete' question.id %} " class="btn btn-danger d-print-none" style="float:right ">Delete choice</a>
+             <a  href="{% url 'questionnaire_detail' pk=question.questionnaire.pk %}">done</a>
+                <div>
+                        {% for choice in question.choices.all %}
+                          <p>{{choice.text}}</p>
+                             <a href="{% url 'choice_delete' pk=choice.pk %} ">Remove</a>
+                          </div>
+                        {% endfor %} 
+        </div></div>

@@ -1,8 +1,10 @@
-from django.shortcuts import render
-from django.urls import success_url
-from django.views.generic import DetailView, ListView, 
+from django.shortcuts import render, redirect, get_object_or_404
+from django.http import HttpResponse
+from django.urls import reverse_lazy, reverse
+from django.views.generic import DetailView, ListView
 from django.views.generic.edit import CreateView, DeleteView, UpdateView
 from .models import Questionnaire, Question, Choice
+from .forms import QuestionForm, ChoiceForm
 
 class QuestionnaireList(ListView):
 	model = Questionnaire
@@ -10,16 +12,13 @@ class QuestionnaireList(ListView):
 
 class CreateQuestionnaire(CreateView):
 	model = Questionnaire
-	fields = ['introduction']
+	fields = ['title', 'introduction']
 	template_name = 'questionnaire/questionnaire_form.html'
-	success_url = 'questionnaire_detail'
 
 class UpdateQuestionnaire(UpdateView):
 	model = Questionnaire
-	fields = ['introduction']
+	fields = ['title', 'introduction']
 	template_name = 'questionnaire/questionnaire_form.html'
-	success_url = 'questionnaire_detail'
-
 
 class QuestionnaireDetail(DetailView):
 	model = Questionnaire 
@@ -28,4 +27,112 @@ class QuestionnaireDetail(DetailView):
 class DeleteQuestionnaire(DeleteView):
 	model = Questionnaire
 	template_name  = 'questionnaire/questionnaire_confirm_delete.html'
-	success_url = 'questionnaire_list'
+	success_url = '/questionnaire-list'
+
+
+
+def add_question(request, pk):
+    questionnaire = get_object_or_404(Questionnaire, pk=pk)
+    if request.method == "POST":
+        form = QuestionForm(request.POST)
+        if form.is_valid():
+            question = form.save(commit=False)
+            question.questionnaire = questionnaire
+            form.post_question()
+            question.save()
+        return redirect('question_detail', pk=question.pk)
+    else:
+        form = QuestionForm()
+    return render(request, 'question/question_form.html', {'form': form})
+
+
+
+class QuestionDetail(DeleteView):
+	model = Question
+	template_name = 'question/question_detail.html'
+
+
+"""
+def update_question(request, pk):
+    questionnaire = get_object_or_404(Questionnaire, pk=pk)
+    if request.method == "POST":
+        form = QuestionForm(request.POST)
+        if form.is_valid():
+            question = form.save(commit=False)
+            question.questionnaire = questionnaire
+            question.save()
+            return redirect('questionnaire_detail', pk=questionnaire.pk)
+    else:
+        form = QuestionForm()
+    return render(request, 'question/question_form.html', {'form': form})
+
+
+class QuestionList(ListView):
+    model = Question
+"""
+
+def question_delete(request, pk):
+    question = get_object_or_404(Question, pk=pk)
+    question.delete()
+    return redirect('questionnaire_detail', pk=question.questionnaire.pk)
+
+
+
+
+def add_choice(request, pk):
+    question = get_object_or_404(Question, pk=pk)
+    if request.method == "POST":
+        form = ChoiceForm(request.POST)
+        if form.is_valid():
+            choice = form.save(commit=False)
+            choice.question = question
+            form.post_choice()
+            choice.save()
+        return redirect('question_detail', pk=question.pk)
+    else:
+        form = ChoiceForm()
+    return render(request, 'choice/choice_form.html', {'form': form})
+
+
+
+"""
+def update_choice(request, pk):
+    question = get_object_or_404(Question, pk=pk)
+    if request.method == "POST":
+        form = ChoiceForm(request.POST)
+        if form.is_valid():
+            choice = form.save(commit=False)
+            choice.question = question
+            choice.save()
+            return redirect('question_detail', pk=question.pk)
+    else:
+        form = ChoiceForm()
+    return render(request, 'choice/choice_form.html', {'form': form})
+
+
+class ChoiceList(ListView):
+    model = Choice
+"""
+
+
+def choice_delete(request, pk):
+    choice = get_object_or_404(Choice, pk=pk)
+    choice.delete()
+    return redirect('question_detail', pk=choice.question.pk)
+
+
+
+
+
+
+
+"""
+class QuestionCreate(CreateView):
+	model = Question
+	fields  = ['text', 'questionnaire']
+	template_name = 'question/question_form.html'
+
+class QuestionList(ListView):
+	model = Question
+	template_name = 'question/question_list.html'
+"""
