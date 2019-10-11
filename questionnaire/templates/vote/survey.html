@@ -1,0 +1,36 @@
+<div class="col-md-8 offset-md-2">
+    <div class="panel panel-default">
+        <!-- Default panel contents -->
+        <div class=" panel-heading ">
+            <p>{{questionnaire.title}}</p>
+            <p>{{questionnaire.introduction}}</p>            
+        </div>
+                    <hr>
+                        {% for question in questionnaire.questions.all %}
+             <a href="{% url 'survey_item' question.id %}">{{ question.text }}</a></li>
+            
+              
+
+<!--
+               <form action="{% url 'vote' question.id %}" method="post">
+                {% csrf_token %}
+                          {% for choice in question.choices.all %}
+
+<input type="radio" name="choice" id="choice{{ forloop.counter }}" value="{{ choice.id }}" />
+        <label for="choice{{ forloop.counter }}">{{ choice.text }}</label><br>
+                          {% endfor %}
+
+                          </div>
+                        {% endfor %} 
+            <button type="submit" class="btn btn-primary">  Vote  </button>
+
+                    </form>
+
+
+
+        </div></div>
+
+        -->
+
+      </div>
+    </div>

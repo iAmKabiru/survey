@@ -3,8 +3,10 @@ from . import views
 
 
 urlpatterns = [
-	path('new-questionnaire', views.CreateQuestionnaire.as_view(), name='create_questionnaire'),
-	path('questionnaire-list', views.QuestionnaireList.as_view(), name = 'questionnaire_list'),
+    path('new-questionnaire', views.add_questionnaire, name='create_questionnaire'),
+	#path('new-questionnaire', views.CreateQuestionnaire.as_view(), name='create_questionnaire'),
+    path('questionnaire-list', views.questionnaire_list, name='questionnaire_list'),
+	#path('questionnaire-list', views.QuestionnaireList.as_view(), name = 'questionnaire_list'),
 	path('update-questionnaire/<int:pk>/', views.UpdateQuestionnaire.as_view(), name='update_questionnaire'),
 	path('questionnaire-detail/<int:pk>/', views.QuestionnaireDetail.as_view(), name='questionnaire_detail'),
 	path('delete-questionnaire/<int:pk>/', views.DeleteQuestionnaire.as_view(), name = 'delete_questionnaire'),
@@ -20,8 +22,10 @@ urlpatterns = [
     path('question/<int:pk>/choice/', views.add_choice, name='add_choice'),
     path('question/<int:pk>/delete_choice/', views.choice_delete, name='choice_delete'),
 
-    # vote veiws
-    path('<int:question_id>/vote/', views.vote, name='vote'),
+    # vote veiws for surveys
+    path('survey/<int:pk>/', views.Survey.as_view(), name='survey'),
+    path('survey-question/<int:pk>/', views.SurveyItem.as_view(), name='survey_item'),
+    path('<int:question_id>/answer-question/', views.vote, name='vote'),
     path('thank-you', views.ThankYouView.as_view(), name="thank_you"),
 
     # user views

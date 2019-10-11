@@ -1,5 +1,17 @@
 from django import forms 
-from .models import Question, Choice
+from .models import Questionnaire, Question, Choice
+
+
+
+class QuestionnaireForm(forms.ModelForm):
+
+    class Meta:
+        model = Questionnaire
+        exclude = ('author',)
+
+    def post_questionnaire(self):
+       text = self.cleaned_data.get('title')
+       text = self.cleaned_data.get('introduction')
 
 class QuestionForm(forms.ModelForm):
 

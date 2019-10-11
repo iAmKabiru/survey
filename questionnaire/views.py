@@ -7,16 +7,56 @@ from django.views.generic import DetailView, ListView
 from django.views.generic.base import TemplateView
 from django.views.generic.edit import CreateView, DeleteView, UpdateView
 from .models import Questionnaire, Question, Choice
-from .forms import QuestionForm, ChoiceForm
+from .forms import QuestionForm, ChoiceForm, QuestionnaireForm
+from django.template import loader
 
+
+
+
+def questionnaire_list(request):
+    questionnaires = Questionnaire.objects.filter(author=request.user)
+    template = loader.get_template('questionnaire/questionnaire_list.html') 
+    context = { 'questionnaires': questionnaires, } 
+    return HttpResponse(template.render(context, request)) 
+
+
+
+"""
 class QuestionnaireList(ListView):
 	model = Questionnaire
 	template_name = 'questionnaire/questionnaire_list.html'
+
+    def get_queryset(self):
+        return Questionnaire.objects.filter(author=request.user)
+
+
+
+
+
+    def get_queryset(self):
+        return Questionnaire.objects.filter(author=request.user)
+
 
 class CreateQuestionnaire(CreateView):
 	model = Questionnaire
 	fields = ['title', 'introduction']
 	template_name = 'questionnaire/questionnaire_form.html'
+"""
+
+def add_questionnaire(request):
+    if request.method == "POST":
+        form = QuestionnaireForm(request.POST)
+        if form.is_valid():
+            questionnaire = form.save(commit=False)
+            questionnaire.author = request.user
+            form.post_questionnaire()
+            questionnaire.save()
+        return redirect('questionnaire_list')
+    else:
+        form = QuestionnaireForm()
+    return render(request, 'questionnaire/questionnaire_form.html', {'form': form})
+
+
 
 class UpdateQuestionnaire(UpdateView):
 	model = Questionnaire
@@ -50,7 +90,7 @@ def add_question(request, pk):
 
 
 
-class QuestionDetail(DeleteView):
+class QuestionDetail(DetailView):
 	model = Question
 	template_name = 'question/question_detail.html'
 
@@ -140,6 +180,20 @@ class QuestionList(ListView):
 	template_name = 'question/question_list.html'
 """
 
+######################### SURVEY FORMS ################
+
+class Survey(DetailView):
+    model = Questionnaire 
+    template_name = 'vote/survey.html'
+
+
+
+class SurveyItem(DetailView):
+    model = Question
+    template_name = 'vote/vote.html'
+
+
+
 
 
 def vote(request, question_id):
@@ -147,7 +201,7 @@ def vote(request, question_id):
     try:
         selected_choice = question.choices.get(pk=request.POST['choice'])
     except(KeyError, Choice.DoesNotExist):
-        return render(request, 'question/question_detail.html',
+        return render(request, 'vote/vote.html',
         {
             'question':question,
             'error_message': "you didnt select a question"
@@ -155,7 +209,19 @@ def vote(request, question_id):
     else:
         selected_choice.vote +=1
         selected_choice.save()
-        return HttpResponseRedirect(reverse('question_detail', args=(question.id + 1,)))
+        questionnaire = selected_choice.question.questionnaire
+        question_list = Question.objects.filter(questionnaire_id = questionnaire.id)
+        question_ids = []
+        for qi in question_list:
+            question_ids.append(qi.id)
+
+        try:
+            next = question_ids[question_ids.index(question.id)+1]
+            return HttpResponseRedirect(reverse('survey_item', args=(next,)))
+        except IndexError:
+            return HttpResponseRedirect(reverse('thank_you'))
+
+
 
 
 """
