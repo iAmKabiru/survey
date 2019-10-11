@@ -1,7 +1,6 @@
 from django import forms 
 from .models import Question, Choice
 
-
 class QuestionForm(forms.ModelForm):
 
     class Meta:
@@ -17,7 +16,7 @@ class ChoiceForm(forms.ModelForm):
 
 	class Meta:
 		model = Choice
-		exclude = ('question',)
+		exclude = ('question','vote',)
 
 	def post_choice(self):
 		text = self.cleaned_data.get('text')

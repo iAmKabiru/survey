@@ -18,6 +18,13 @@ urlpatterns = [
 
     # CHOICE URLS
     path('question/<int:pk>/choice/', views.add_choice, name='add_choice'),
-    path('question/<int:pk>/add-delete/', views.choice_delete, name='choice_delete'),
+    path('question/<int:pk>/delete_choice/', views.choice_delete, name='choice_delete'),
 
+    # vote veiws
+    path('<int:question_id>/vote/', views.vote, name='vote'),
+    path('thank-you', views.ThankYouView.as_view(), name="thank_you"),
+
+    # user views
+    path('profile', views.profile, name='profile'),
+    path('signup/', views.SignUpView.as_view(), name='signup')
 ]

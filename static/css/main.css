@@ -1,0 +1,42 @@
+body{
+	background-color:#F5F5DC;
+}
+
+.title{
+	line-height: 65px;
+	color: brown;
+}
+
+.navbar{
+	background-color:brown !important;
+}
+
+.navbar-brand{
+	text-decoration: none;
+	color:white;
+	font-size: 20px;
+
+}
+
+.panel{
+	background-color: white;
+}
+
+.balance{
+	color: blue;
+}
+
+.login{
+
+-moz-box-shadow: 0 0 10px #999;
+-webkit-box-shadow: 0 0 10px #999;
+box-shadow: 0 0 10px #999;
+
+
+}
+
+.login-btn{
+	background-color: brown;
+	border-style: none;
+
+}

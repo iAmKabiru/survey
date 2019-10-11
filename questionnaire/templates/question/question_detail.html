@@ -1,6 +1,7 @@
+
+
 <div class="col-md-8 offset-md-2">
     <div class="panel panel-default">
-        <!-- Default panel contents -->
         <div class=" panel-heading ">
             <p>{{question.text}}</p>
         </div>
@@ -18,3 +19,20 @@
                           </div>
                         {% endfor %} 
         </div></div>
+
+
+<!--
+
+<div class="container pt-5">
+    <h2 class=text-primary>{{ question.text }}</h2>
+    {% if error_message %}
+    <p><strong>{{ error_message }}</strong></p>{% endif %}
+    <form action="{% url 'vote' question.id %}" method="post">
+        {% csrf_token %} {% for choice in question.choices.all %}
+        <input type="radio" name="choice" id="choice{{ forloop.counter }}" value="{{ choice.id }}" />
+        <label for="choice{{ forloop.counter }}">{{ choice.text }}</label><br /> {% endfor %}
+        <button type="submit" class="btn btn-primary"> Next  </button>
+    </form>
+</div>
+
+-->

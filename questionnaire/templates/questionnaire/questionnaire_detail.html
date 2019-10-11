@@ -5,17 +5,33 @@
             <p>{{questionnaire.title}}</p>
             <p>{{questionnaire.introduction}}</p>            
         </div>
-        <div>
-            <a class="btn btn-primary" href="{% url 'update_questionnaire' questionnaire.pk %}">update questionnaire</a>
-        </div>
-        <div class="panel-body ">
-            <div class="container-fluid ">
-                <a class="btn btn-primary" href="{% url 'add_question' pk=questionnaire.pk %} ">Add question</a> 
-                <a href="{% url 'delete_questionnaire' questionnaire.id %} " class="btn btn-danger d-print-none" style="float:right ">Delete questionnaire</a>
-                <div>
+        <a href="{% url 'add_question' pk=questionnaire.pk %}">add question</a>
+                    <hr>
                         {% for question in questionnaire.questions.all %}
-                          <p>{{question.text}}</p>
-                             <a href="{% url 'question_delete' pk=question.pk %} ">Remove</a>
+             <a href="{% url 'question_detail' question.id %}">{{ question.text }}</a></li>
+            
+              
+
+<!--
+               <form action="{% url 'vote' question.id %}" method="post">
+                {% csrf_token %}
+                          {% for choice in question.choices.all %}
+
+<input type="radio" name="choice" id="choice{{ forloop.counter }}" value="{{ choice.id }}" />
+        <label for="choice{{ forloop.counter }}">{{ choice.text }}</label><br>
+                          {% endfor %}
+
                           </div>
                         {% endfor %} 
+            <button type="submit" class="btn btn-primary">  Vote  </button>
+
+                    </form>
+
+
+
         </div></div>
+
+        -->
+
+      </div>
+    </div>
