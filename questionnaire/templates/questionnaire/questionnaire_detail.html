@@ -1,37 +1,35 @@
-<div class="col-md-8 offset-md-2">
-    <div class="panel panel-default">
-        <!-- Default panel contents -->
-        <div class=" panel-heading ">
-            <p>{{questionnaire.title}}</p>
-            <p>{{questionnaire.introduction}}</p>            
-        </div>
-        <a href="{% url 'add_question' pk=questionnaire.pk %}">add question</a>
-                    <hr>
-                        {% for question in questionnaire.questions.all %}
-             <a href="{% url 'question_detail' question.id %}">{{ question.text }}</a></li>
-            
-              
+{% extends 'base.html' %}
 
-<!--
-               <form action="{% url 'vote' question.id %}" method="post">
-                {% csrf_token %}
-                          {% for choice in question.choices.all %}
-
-<input type="radio" name="choice" id="choice{{ forloop.counter }}" value="{{ choice.id }}" />
-        <label for="choice{{ forloop.counter }}">{{ choice.text }}</label><br>
-                          {% endfor %}
-
-                          </div>
-                        {% endfor %} 
-            <button type="submit" class="btn btn-primary">  Vote  </button>
-
-                    </form>
-
-
-
-        </div></div>
-
-        -->
-
-      </div>
+{% block result %}
+  <a class="navbar-brand text-white" href="{% url 'result' questionnaire.id %}"><b>RESULT</b></a>
+{% endblock %}
+{% block content %}
+<br>
+<div class="col-md-12">
+      <div class="panel panel-default">
+        <div class="panel-heading">
+          <h3>{{questionnaire.title}}</h3>
+                  <p>{{questionnaire.introduction}}</p>
+      </h3>
+      <p>Survey Link: http://127.0.0.1:8000/survey/{{questionnaire.id}}</p>
+    <div class="container row">
+      <a href="{% url 'update_questionnaire' questionnaire.id %}" class="btn btn-success">Edit</a>
+      <a href="{% url 'delete_questionnaire' questionnaire.id %}" class="btn btn-danger">Delete</a>
     </div>
+  </div>
+    <br>
+    <div class="container">
+    <a href="{% url 'add_question' pk=questionnaire.pk %}" class="btn btn-primary">add question</a>
+
+    {% for question in questionnaire.questions.all %}
+            <ul><a href="{% url 'question_detail' question.id %}"><h4>{{ question.text }}</h4></a>
+            {% for choice in question.choices.all %}
+            <li><h5>{{choice.text}}</h5></li>
+             {% endfor %}
+          </ul>
+               {% endfor %}
+      </div>
+      <br>
+    </div>
+
+    {% endblock %}

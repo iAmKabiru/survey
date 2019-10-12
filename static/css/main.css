@@ -1,5 +1,5 @@
 body{
-	background-color:#F5F5DC;
+	background-color: #eee;
 }
 
 .title{
@@ -8,35 +8,54 @@ body{
 }
 
 .navbar{
-	background-color:brown !important;
+	background-color:teal !important;
+	height:70px;
+	border-radius: 0px;
+	-moz-box-shadow: 0 0 35px #999;
+	-webkit-box-shadow: 0 0 15px #999;
+	box-shadow: 0 0 35px #999;
 }
 
 .navbar-brand{
 	text-decoration: none;
 	color:white;
 	font-size: 20px;
+	text-align: right;
 
 }
 
 .panel{
 	background-color: white;
+	color: black;
 }
 
 .balance{
 	color: blue;
 }
 
-.login{
-
--moz-box-shadow: 0 0 10px #999;
--webkit-box-shadow: 0 0 10px #999;
-box-shadow: 0 0 10px #999;
-
+.login .navbar-brand{
+-moz-box-shadow: 0 0 35px #999;
+	-webkit-box-shadow: 0 0 15px #999;
+	box-shadow: 0 0 35px #999;
 
 }
 
-.login-btn{
-	background-color: brown;
-	border-style: none;
+.add-new{
+	border-radius: 200px;
+	height: 100px;
+	width: 100px;
+}
 
+.login-btn{
+	background-color: orange;
+	border-style: none;
+	color: black;
+
+}
+
+.card{
+	height: 300px;
+}
+.btn{
+	border-radius: 0px;
 }

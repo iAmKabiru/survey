@@ -9,10 +9,11 @@ from django.views.generic.edit import CreateView, DeleteView, UpdateView
 from .models import Questionnaire, Question, Choice
 from .forms import QuestionForm, ChoiceForm, QuestionnaireForm
 from django.template import loader
+from django.contrib.auth.decorators import login_required
+from django.contrib.auth.mixins import LoginRequiredMixin
 
 
-
-
+@login_required
 def questionnaire_list(request):
     questionnaires = Questionnaire.objects.filter(author=request.user)
     template = loader.get_template('questionnaire/questionnaire_list.html') 
@@ -42,7 +43,7 @@ class CreateQuestionnaire(CreateView):
 	fields = ['title', 'introduction']
 	template_name = 'questionnaire/questionnaire_form.html'
 """
-
+@login_required
 def add_questionnaire(request):
     if request.method == "POST":
         form = QuestionnaireForm(request.POST)
@@ -58,22 +59,22 @@ def add_questionnaire(request):
 
 
 
-class UpdateQuestionnaire(UpdateView):
+class UpdateQuestionnaire(LoginRequiredMixin, UpdateView):
 	model = Questionnaire
 	fields = ['title', 'introduction']
 	template_name = 'questionnaire/questionnaire_form.html'
 
-class QuestionnaireDetail(DetailView):
+class QuestionnaireDetail(LoginRequiredMixin, DetailView):
 	model = Questionnaire 
 	template_name = 'questionnaire/questionnaire_detail.html'
 
-class DeleteQuestionnaire(DeleteView):
+class DeleteQuestionnaire(LoginRequiredMixin, DeleteView):
 	model = Questionnaire
 	template_name  = 'questionnaire/questionnaire_confirm_delete.html'
-	success_url = '/questionnaire-list'
+	success_url = reverse_lazy('questionnaire_list')
 
 
-
+@login_required
 def add_question(request, pk):
     questionnaire = get_object_or_404(Questionnaire, pk=pk)
     if request.method == "POST":
@@ -90,10 +91,16 @@ def add_question(request, pk):
 
 
 
-class QuestionDetail(DetailView):
+class QuestionDetail(LoginRequiredMixin, DetailView):
 	model = Question
 	template_name = 'question/question_detail.html'
 
+
+
+class QuestionUpdate(LoginRequiredMixin, UpdateView):
+    model = Question
+    form_class = QuestionForm
+    template_name = 'question/question_form.html'
 
 """
 def update_question(request, pk):
@@ -113,7 +120,7 @@ def update_question(request, pk):
 class QuestionList(ListView):
     model = Question
 """
-
+@login_required
 def question_delete(request, pk):
     question = get_object_or_404(Question, pk=pk)
     question.delete()
@@ -121,7 +128,7 @@ def question_delete(request, pk):
 
 
 
-
+@login_required
 def add_choice(request, pk):
     question = get_object_or_404(Question, pk=pk)
     if request.method == "POST":
@@ -157,7 +164,7 @@ class ChoiceList(ListView):
     model = Choice
 """
 
-
+@login_required
 def choice_delete(request, pk):
     choice = get_object_or_404(Choice, pk=pk)
     choice.delete()
@@ -204,7 +211,7 @@ def vote(request, question_id):
         return render(request, 'vote/vote.html',
         {
             'question':question,
-            'error_message': "you didnt select a question"
+            'error_message': "you didnt select a choice"
         })
     else:
         selected_choice.vote +=1
@@ -245,6 +252,29 @@ def vote(request, question_id):
 
 class ThankYouView(TemplateView):
     template_name = 'vote/thank_you.html'
+
+@login_required
+def result(request, pk):
+    item = {}
+    questions = {}
+    #questionnaire = Questionnaire.objects.get(id=4)
+    questionnaire = get_object_or_404(Questionnaire, pk=pk)
+    q_list = {}
+    q_list = Question.objects.filter(questionnaire_id=questionnaire.id)
+    for question in q_list:
+        for choice in Choice.objects.filter(question_id=question.id):
+            item['option'] = choice.text
+            item['quantity'] = choice.vote
+        questions['text'] = question.text
+        questions['items'] = item
+    context = {
+    'title': questionnaire.title,
+    'questions': questions
+    }
+    return render(request, 'vote/result.html', context=context)
+
+
+
 
 
 

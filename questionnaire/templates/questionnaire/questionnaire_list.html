@@ -1,5 +1,27 @@
+
+{% extends 'base.html' %}
+
+{% block content %}
+{% load static %}
+
+<a href="/questionnaire-detail/{{quest.id}}"></a>
+<div class="container">
+	<br><br><br>
+<div class="row">
 {% for quest in questionnaires %}
+		<div class="col-sm-4">
+			<a href="{% url 'questionnaire_detail' quest.id %}">
+			<div class="card bg-info text-white text-center">
+				  <h5 class="card-title"></h5>
+                  <h1 class="card-text">{{quest.title}}</h1>
+			</div>
+		</a>
+		</div>
+	{% endfor %}
+	<div class="col-sm-4">
+			<a href="{% url 'create_questionnaire' %}"> <img src="{% static 'img/add-new.png' %}" width="150px" height="150"></a>
+		</div>
+</div>
+</div>
 
-{{quest.title}}
-
-{% endfor %}
+{% endblock %}

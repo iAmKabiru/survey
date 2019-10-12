@@ -1,26 +1,30 @@
-
-
+{% extends 'base.html' %}
+{% block content %}
 <div class="col-md-8 offset-md-2">
     <div class="panel panel-default">
         <div class=" panel-heading ">
-            <p>{{question.text}}</p>
+            <h3>{{question.text}}</h3>
+            <div class="container-fluid ">
+                <a href="{% url 'questionnaire_detail' pk=question.questionnaire.pk %}" class="btn btn-success"><-- Done</a>
+            <a href="{% url 'question_update' question.id %} " class="btn btn-secondary" style="float:right ">Update Question</a>
+                <a href="{% url 'question_delete' question.id %} " class="btn btn-danger d-print-none" style="float:right ">Delete Question</a>
         </div>
-        <div>
         </div>
         <div class="panel-body ">
-            <div class="container-fluid ">
-                <a class="btn btn-primary" href="{% url 'add_choice' pk=question.pk %} ">Add choice</a> 
-                <a href="{% url 'question_delete' question.id %} " class="btn btn-danger d-print-none" style="float:right ">Delete choice</a>
-             <a  href="{% url 'questionnaire_detail' pk=question.questionnaire.pk %}">done</a>
-                <div>
+            <div class="container">
+                            <a class="btn btn-primary" href="{% url 'add_choice' pk=question.pk %} ">Add choice</a> 
+<hr>
                         {% for choice in question.choices.all %}
-                          <p>{{choice.text}}</p>
-                             <a href="{% url 'choice_delete' pk=choice.pk %} ">Remove</a>
-                          </div>
+                        <div class="row">
+                          <p class="ml-5">{{choice.text}}</p>
+                             <a href="{% url 'choice_delete' pk=choice.pk %}" class="ml-5">  Remove</a>
+                         </div>
+                        
                         {% endfor %} 
         </div></div>
+    </div>
 
-
+{% endblock %}
 <!--
 
 <div class="container pt-5">
