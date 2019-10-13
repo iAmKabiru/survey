@@ -1,11 +1,100 @@
 {% extends 'base.html' %}
+{% block result %}
+  <a class="navbar-brand text-white" href="{% url 'result' questionnaire.id %}"><b>RESULT</b></a>
+{% endblock %}
 {% block content %}
-<p>	{{title}} </p>
+<div>
+</div>
+<div>
+	{% for question in questionnaire.questions.all %}
+	<div class="panel panel-default">
+		<div class="panel-heading">
+			<div class="container">
+			<div class="row">
 
-{% for question in questions %}
-	{% for item in items %}
-	{{item}}
+				<div class="col-md-6">
+	<b>{{question}}</b>
+</div>
+<div class="col-md-2 offset-md-4">
+	Response: <b>{{question.get_vote_sum}}</b>
+</div>
+</div>
+</div>
+</div>
+<div class="panel-body">
+<div class="row">
+	<div class="col-md-6">
+	<table class="table table-bordered">
+			<thead>
+				<td>Choice</td>
+				<td>Frequency</td>
+				<td>Percentage</td>
+			</thead>
+			<tbody>
+	{% for choice in question.choices.all %}
+			<tr>
+				<td>
+					{{choice.text}}
+				</td>
+				<td>
+					{{choice.vote}}
+				</td>
+				<td>
+					{{choice.vote}}
+				</td>
+			</tr>
 	{% endfor %}
+		</tbody>
+	</table>
+</div>
+
+
+
+<div class="col-md-2">
+<!-- CHART -->
+<div id='{{forloop.counter}}' style="min-width: 310px; height: 400px; max-width: 300px; margin: 0 auto"></div>
+		<script type="text/javascript">
+// Build the chart
+Highcharts.chart('{{forloop.counter}}', {
+    chart: {
+        plotBackgroundColor: null,
+        plotBorderWidth: null,
+        plotShadow: false,
+        type: 'pie'
+    },
+    title: {
+        text: 'chart'
+    },
+    tooltip: {
+        pointFormat: '{series.name}: <b>{point.percentage:.1f}%</b>'
+    },
+    plotOptions: {
+        pie: {
+            allowPointSelect: true,
+            cursor: 'pointer',
+            dataLabels: {
+                enabled: false
+            },
+            showInLegend: true
+        }
+    },
+    series: [{
+        name: '{{choice.text}}',
+        colorByPoint: true,
+        data: [
+        {% for choice in question.choices.all %}
+        {
+            name: '{{choice.text}}',
+            y: {{choice.vote}},
+        },   
 {% endfor %}
+        ]
+    }]
+});
+		</script>
+</div>
+</div></div>
+</div>
+	{% endfor %}
 </div>
 {% endblock %}

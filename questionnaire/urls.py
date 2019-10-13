@@ -27,7 +27,8 @@ urlpatterns = [
     path('survey-question/<int:pk>/', views.SurveyItem.as_view(), name='survey_item'),
     path('<int:question_id>/answer-question/', views.vote, name='vote'),
     path('thank-you', views.ThankYouView.as_view(), name="thank_you"),
-    path('result/<int:pk>/', views.result, name='result'),
+    #path('result/<int:pk>/', views.result, name='result'),
+    path('result/<int:pk>/', views.Result.as_view(), name='result'),
 
     # user views
     path('profile', views.profile, name='profile'),

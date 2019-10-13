@@ -60,9 +60,10 @@ def add_questionnaire(request):
 
 
 class UpdateQuestionnaire(LoginRequiredMixin, UpdateView):
-	model = Questionnaire
-	fields = ['title', 'introduction']
-	template_name = 'questionnaire/questionnaire_form.html'
+    model = Questionnaire
+    form_class = QuestionnaireForm
+    template_name = 'questionnaire/questionnaire_form.html'
+
 
 class QuestionnaireDetail(LoginRequiredMixin, DetailView):
 	model = Questionnaire 
@@ -253,8 +254,10 @@ def vote(request, question_id):
 class ThankYouView(TemplateView):
     template_name = 'vote/thank_you.html'
 
+"""
 @login_required
 def result(request, pk):
+    
     item = {}
     questions = {}
     #questionnaire = Questionnaire.objects.get(id=4)
@@ -271,11 +274,20 @@ def result(request, pk):
     'title': questionnaire.title,
     'questions': questions
     }
+    
+    questionnaire = get_object_or_404(Questionnaire, pk=pk)
+
+    context = {
+    'questionnaire': questionnaire
+    }
     return render(request, 'vote/result.html', context=context)
+"""
 
 
 
-
+class Result(LoginRequiredMixin, DetailView):
+    model = Questionnaire
+    template_name = 'vote/result.html'
 
 
 

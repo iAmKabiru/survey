@@ -23,3 +23,5 @@ urlpatterns = [
 ]
 
 
+admin.site.site_header = "Questionnaire Management System"
+admin.site.site_title = "Questionnaire Management System"

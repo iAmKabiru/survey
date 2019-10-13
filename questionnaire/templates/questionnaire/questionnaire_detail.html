@@ -11,7 +11,7 @@
           <h3>{{questionnaire.title}}</h3>
                   <p>{{questionnaire.introduction}}</p>
       </h3>
-      <p>Survey Link: http://127.0.0.1:8000/survey/{{questionnaire.id}}</p>
+      <p>Survey Link: <em style="color: blue;"> http://127.0.0.1:8000/survey/{{questionnaire.id}}</em></p>
     <div class="container row">
       <a href="{% url 'update_questionnaire' questionnaire.id %}" class="btn btn-success">Edit</a>
       <a href="{% url 'delete_questionnaire' questionnaire.id %}" class="btn btn-danger">Delete</a>
