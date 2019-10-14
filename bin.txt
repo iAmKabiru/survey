@@ -1,8 +1,0 @@
- <a href="{% url 'question_delete' pk=question.pk %} ">Remove</a>
-
-
-             <a href="{% url 'question_detail' question.id %}">{{ question.text }}</a></li>
-
-
-
-
