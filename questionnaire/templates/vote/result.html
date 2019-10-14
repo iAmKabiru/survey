@@ -3,6 +3,8 @@
   <a class="navbar-brand text-white" href="{% url 'result' questionnaire.id %}"><b>RESULT</b></a>
 {% endblock %}
 {% block content %}
+{% load quest_extras %}
+
 <div>
 </div>
 <div>
@@ -40,7 +42,7 @@
 					{{choice.vote}}
 				</td>
 				<td>
-					{{choice.vote}}
+					{{choice.vote|pec:question.get_vote_sum|floatformat}} %
 				</td>
 			</tr>
 	{% endfor %}

@@ -39,6 +39,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'questionnaire',
     'crispy_forms',
+    'questionnaire.templatetags.quest_extras'
 ]
 
 MIDDLEWARE = [
