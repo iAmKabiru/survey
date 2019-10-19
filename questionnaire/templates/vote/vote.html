@@ -13,7 +13,7 @@
 		 <div class="panel panel-default">
         <div class=" panel-body">
     <h2 class=text-primary>{{ question.text }}</h2>
-    {% if error_message %}
+   <p class="text-danger"> {% if error_message %}</p>
     <p><strong>{{ error_message }}</strong></p>{% endif %}
     <form action="{% url 'vote' question.id %}" method="post">
         {% csrf_token %} {% for choice in question.choices.all %}

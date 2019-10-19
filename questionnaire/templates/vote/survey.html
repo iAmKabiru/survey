@@ -20,7 +20,7 @@
         <div class="panel panel-body">
         
                         {% for question in questionnaire.questions.all %}
-             <a href="{% url 'survey_item' question.id %}"><h3>{{ question.text }}</h3></a>
+             <a href="{% url 'survey_item' question.id %}" class="btn btn-primary">Start</a>
             
               
 
